@@ -5,21 +5,19 @@ const morgan = require('morgan');
 app.use(morgan('tiny'));
 
 app.use((req, res, next) => {
-  console.log('This is my First Middleware');
-  return next();
-  console.log('This is my First Middleware - After next() called!');
-});
-
-app.use((req, res, next) => {
-  console.log('This is my Second Middleware');
+  req.requestTime = Date.now();
+  req.method = 'GET';
+  console.log(req.method);
   return next();
 });
 
 app.get('/', (req, res) => {
+  console.log(`Requested Time : ${req.requestTime}`);
   res.send('HOME PAGE!');
 });
 
 app.get('/dogs', (req, res) => {
+  console.log(`Requested Time : ${req.requestTime}`);
   res.send('WOOF WOOF!');
 });
 
