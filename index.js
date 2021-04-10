@@ -15,13 +15,13 @@ app.use('/dogs', (req, res, next) => {
   next();
 });
 
-app.use((req, res, next) => {
+const verifyPassword = (req, res, next) => {
   const { password } = req.query;
   if (password === 'chickennugget') {
     next();
   }
   res.send('Sorry you need password!');
-});
+};
 
 app.get('/', (req, res) => {
   console.log(`Requested Time : ${req.requestTime}`);
@@ -33,7 +33,7 @@ app.get('/dogs', (req, res) => {
   res.send('WOOF WOOF!');
 });
 
-app.get('/secret', (req, res) => {
+app.get('/secret', verifyPassword, (req, res) => {
   res.send("Sometimes wear earphone in public so that I don't talk to people!");
 });
 
