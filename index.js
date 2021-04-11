@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const AppError = require('./AppError');
 
 app.use(morgan('tiny'));
 
@@ -21,7 +22,9 @@ const verifyPassword = (req, res, next) => {
     next();
   }
   // res.send('Sorry you need password!');
-  throw new Error('Password required!');
+  // res.status(403);
+  // throw new Error('Password required!');
+  throw new AppError(403, 'Password Required!');
 };
 
 app.get('/', (req, res) => {
@@ -46,11 +49,16 @@ app.use((req, res) => {
   res.status(404).send('NOT FOUND!');
 });
 
+// app.use((err, req, res, next) => {
+//   console.log('==============================================');
+//   console.log('==================Error====================');
+//   console.log('==============================================');
+//   next(err);
+// });
+
 app.use((err, req, res, next) => {
-  console.log('==============================================');
-  console.log('==================Error====================');
-  console.log('==============================================');
-  next(err);
+  const { message = 'Something went wrong!', status = 500 } = err;
+  res.status(status).send(message);
 });
 
 app.listen('3000', (req, res) => {
