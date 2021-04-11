@@ -20,7 +20,8 @@ const verifyPassword = (req, res, next) => {
   if (password === 'chickennugget') {
     next();
   }
-  res.send('Sorry you need password!');
+  // res.send('Sorry you need password!');
+  throw new Error('Password required!');
 };
 
 app.get('/', (req, res) => {
@@ -31,6 +32,10 @@ app.get('/', (req, res) => {
 app.get('/dogs', (req, res) => {
   console.log(`Requested Time : ${req.requestTime}`);
   res.send('WOOF WOOF!');
+});
+
+app.get('/error', (req, res) => {
+  chicken.fly();
 });
 
 app.get('/secret', verifyPassword, (req, res) => {
